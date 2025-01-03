@@ -218,7 +218,11 @@ impl<'de, const N: usize> Visitor<'de> for ByteHashVisitor<N> {
     {
         let mut bytes = [0u8; N];
         for i in 0..N {
-            bytes[i] = seq.next_element().unwrap().unwrap();
+            let next_element = seq.next_element()?;
+            match next_element {
+                Some(value) => bytes[i] = value,
+                None => return Err(de::Error::custom("unexpected error")),
+            }
         }
         Ok(BytesHash(bytes))
     }
