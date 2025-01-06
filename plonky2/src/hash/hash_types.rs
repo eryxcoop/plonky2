@@ -221,7 +221,7 @@ impl<'de, const N: usize> Visitor<'de> for ByteHashVisitor<N> {
             let next_element = seq.next_element()?;
             match next_element {
                 Some(value) => bytes[i] = value,
-                None => return Err(de::Error::custom("unexpected error")),
+                None => return Err(de::Error::invalid_length(i, &self)),
             }
         }
         Ok(BytesHash(bytes))
